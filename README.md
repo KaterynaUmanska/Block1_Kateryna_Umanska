@@ -12,9 +12,9 @@
 
 Проєкт побудований на принципах об'єктно-орієнтованого програмування та демонструє зв'язок між сутностями:
 
-* **PurchaseRequisition (Заявка на закупівлю)** — основна сутність, що містить інформацію про закупівлю. Поля: `id` (Long), `material` (`Material` — вкладений об'єкт), `quantity` (Double), `status` (`Status` — Enum: DRAFT, IN_APPROVAL, APPROVED, CANCELED), `tags` (String — текстові теги через кому).
+* **PurchaseRequisition (Заявка на закупівлю)** - основна сутність, що містить інформацію про закупівлю. Поля: `id` (Long), `material` (`Material` - вкладений об'єкт), `quantity` (Double), `status` (`Status` - Enum: DRAFT, IN_APPROVAL, APPROVED, CANCELED), `tags` (String - текстові теги через кому).
 
-* **Material (Матеріал)** — другорядна сутність. Поля: `id` (Long), `name` (String), `unit` (`Unit` — Enum: KG, PCS, METERS, LITERS), `description` (String).
+* **Material (Матеріал)** - другорядна сутність. Поля: `id` (Long), `name` (String), `unit` (`Unit` - Enum: KG, PCS, METERS, LITERS), `description` (String).
 
 > **Зв'язок між сутностями:** Many-to-One — багато заявок на закупівлю можуть бути пов'язані з одним матеріалом.
 
@@ -168,7 +168,7 @@ README.md
 
 Для перевірки основної логіки проєкту реалізовані unit-тести:
 
-* **`JsonStreamParserTest`** — перевірка парсингу JSON-файлів;
-* **`StatisticsAggregatorTest`** — перевірка формування статистики та обробки багатозначних атрибутів;
-* **`DirectoryProcessorTest`** — перевірка обробки директорії та генерації XML-звіту;
-* **`XmlReportWriterTest`** — перевірка формування XML-файлу.
+* **`JsonStreamParserTest`** - перевірка парсингу JSON-файлів;
+* **`StatisticsAggregatorTest`** - перевірка формування статистики та обробки багатозначних атрибутів;
+* **`DirectoryProcessorTest`** - перевірка обробки директорії та генерації XML-звіту;
+* **`XmlReportWriterTest`** - перевірка формування XML-файлу.
