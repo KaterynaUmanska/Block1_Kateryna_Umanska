@@ -39,9 +39,12 @@ public class DataGenerator {
     private static final int MATERIALS_COUNT = 500;
 
     public static void main(String[] args) {
+        generateData();
+    }
+    public static void generateData() {
 
-        File dataDirectory =
-                new File("data");
+            File dataDirectory =
+                    new File("data");
 
         if (!dataDirectory.exists()
                 && !dataDirectory.mkdirs()) {

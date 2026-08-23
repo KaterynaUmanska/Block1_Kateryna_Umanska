@@ -1,15 +1,18 @@
 package org.example;
 
+import org.example.service.DataGenerator;
 import org.example.service.DirectoryProcessor;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
         try {
-            String directoryPath;
+            generateDataIfNeeded();
+
+            String directoryPath = "data";
             String attribute;
             int threadCount;
 
@@ -18,43 +21,53 @@ public class Main {
 
                 System.out.println("Консольна програма збору статистики");
 
-                System.out.print("1. Введіть шлях до папки з JSON-файлами: ");
-                directoryPath = scanner.nextLine().trim();
-
                 System.out.print(
-                        "2. Введіть назву атрибута для статистики " +
+                        "Введіть назву атрибута для статистики " +
                                 "(material, status, tags, unit): "
                 );
                 attribute = scanner.nextLine().trim();
 
-                int availableCores = Runtime.getRuntime().availableProcessors();
+                int availableCores =
+                        Runtime.getRuntime().availableProcessors();
 
                 System.out.print(
-                        "3. Введіть кількість потоків " +
+                        "Введіть кількість потоків " +
                                 "(натисніть Enter для значення за замовчуванням: "
                                 + availableCores + "): "
                 );
 
-                String threadsInput = scanner.nextLine().trim();
+                String threadsInput =
+                        scanner.nextLine().trim();
 
-                threadCount = parseThreadCount(threadsInput, availableCores);
+                threadCount =
+                        parseThreadCount(
+                                threadsInput,
+                                availableCores
+                        );
 
             } else {
                 directoryPath = args[0].trim();
                 attribute = args[1].trim();
 
-                int availableCores = Runtime.getRuntime().availableProcessors();
+                int availableCores =
+                        Runtime.getRuntime().availableProcessors();
 
-                threadCount = args.length >= 3
-                        ? parseThreadCount(args[2], availableCores)
-                        : availableCores;
+                threadCount =
+                        args.length >= 3
+                                ? parseThreadCount(
+                                args[2],
+                                availableCores
+                        )
+                                : availableCores;
             }
 
             System.out.println("\nЗапуск обробки...");
 
-            long startTime = System.currentTimeMillis();
+            long startTime =
+                    System.currentTimeMillis();
 
-            DirectoryProcessor processor = new DirectoryProcessor();
+            DirectoryProcessor processor =
+                    new DirectoryProcessor();
 
             processor.processDirectory(
                     directoryPath,
@@ -62,7 +75,8 @@ public class Main {
                     threadCount
             );
 
-            long endTime = System.currentTimeMillis();
+            long endTime =
+                    System.currentTimeMillis();
 
             System.out.println(
                     "Загальний час виконання (" +
@@ -80,6 +94,38 @@ public class Main {
         }
     }
 
+    private static void generateDataIfNeeded() {
+        File dataDirectory =
+                new File("data");
+
+        if (!hasJsonFiles(dataDirectory)) {
+            System.out.println(
+                    "Вхідні дані не знайдено. " +
+                            "Запускаємо генерацію тестових даних..."
+            );
+
+            DataGenerator.generateData();
+        }
+    }
+
+    private static boolean hasJsonFiles(
+            File dataDirectory
+    ) {
+        if (!dataDirectory.isDirectory()) {
+            return false;
+        }
+
+        File[] jsonFiles =
+                dataDirectory.listFiles(
+                        (directory, name) ->
+                                name.toLowerCase()
+                                        .endsWith(".json")
+                );
+
+        return jsonFiles != null
+                && jsonFiles.length > 0;
+    }
+
     private static int parseThreadCount(
             String input,
             int defaultValue
@@ -89,7 +135,8 @@ public class Main {
         }
 
         try {
-            int threadCount = Integer.parseInt(input);
+            int threadCount =
+                    Integer.parseInt(input);
 
             if (threadCount <= 0) {
                 System.out.println(
