@@ -11,14 +11,9 @@ import java.util.Map;
 
 public class XmlReportWriter {
     public void generateReport(Map<String, Long> statistics, String attribute) throws IOException, XMLStreamException {
-        File outputDirectory = new File("examples");
-
-        if (!outputDirectory.exists() && !outputDirectory.mkdirs()) {
-            throw new IOException("Не вдалося створити директорію examples");
-        }
 
         String fileName = "statistics_by_" + attribute.toLowerCase() + ".xml";
-        File outputFile = new File(outputDirectory, fileName);
+        File outputFile = new File(fileName);
 
         var sortedList = statistics.entrySet().stream()
                 .sorted(

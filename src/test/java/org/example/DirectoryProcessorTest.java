@@ -40,7 +40,7 @@ public class DirectoryProcessorTest {
         DirectoryProcessor processor = new DirectoryProcessor();
         processor.processDirectory(tempDir.toString(), "tags", 2);
 
-        File reportFile = new File("examples/statistics_by_tags.xml");
+        File reportFile = new File("statistics_by_tags.xml");
         assertTrue(reportFile.exists(), "Звіт statistics_by_tags.xml має бути згенерований");
 
         String content = Files.readString(reportFile.toPath());

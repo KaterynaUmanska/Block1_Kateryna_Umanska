@@ -15,7 +15,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class XmlReportWriterTest {
-    private final File expectedFile = new File("examples/statistics_by_tags.xml");
+    private final File expectedFile = new File("statistics_by_tags.xml");
 
     @AfterEach
     void cleanup() {
