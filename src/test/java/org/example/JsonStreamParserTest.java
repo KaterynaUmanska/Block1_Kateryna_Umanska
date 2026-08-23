@@ -15,8 +15,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class JsonStreamParserTest {
 
@@ -97,6 +96,27 @@ class JsonStreamParserTest {
         assertEquals(
                 Unit.KG,
                 transaction.getMaterial().getUnit()
+        );
+    }
+    @Test
+    @DisplayName("Повинен відхиляти JSON, який не є масивом")
+    void shouldRejectJsonWithoutArray(@TempDir Path tempDir) throws IOException {
+
+        File file = tempDir.resolve("invalid.json").toFile();
+
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.write("""
+                {
+                  "id": 1
+                }
+                """);
+        }
+
+        JsonStreamParser parser = new JsonStreamParser();
+
+        assertThrows(
+                IllegalStateException.class,
+                () -> parser.parseFile(file, transaction -> {})
         );
     }
 }

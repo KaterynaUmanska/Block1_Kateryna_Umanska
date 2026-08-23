@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.model.Material;
+import org.example.model.Unit;
 import org.example.service.StatisticsAggregator;
 import org.example.model.PurchaseTransaction;
 import org.example.model.Status;
@@ -72,18 +74,120 @@ public class StatisticsAggregatorTest {
 
         assertTrue(aggregator.getResultMap().isEmpty());
     }
+    @Test
+    @DisplayName("Повинен правильно підраховувати статистику за одиницею вимірювання")
+    void shouldCorrectlyAggregateUnit() {
 
+        StatisticsAggregator aggregator =
+                new StatisticsAggregator("unit");
+
+        PurchaseTransaction req1 =
+                new PurchaseTransaction();
+
+        Material material1 =
+                new Material();
+
+        material1.setUnit(Unit.KG);
+        req1.setMaterial(material1);
+
+        PurchaseTransaction req2 =
+                new PurchaseTransaction();
+
+        Material material2 =
+                new Material();
+
+        material2.setUnit(Unit.KG);
+        req2.setMaterial(material2);
+
+        PurchaseTransaction req3 =
+                new PurchaseTransaction();
+
+        Material material3 =
+                new Material();
+
+        material3.setUnit(Unit.PCS);
+        req3.setMaterial(material3);
+
+        aggregator.process(req1);
+        aggregator.process(req2);
+        aggregator.process(req3);
+
+        Map<String, Long> result =
+                aggregator.getResultMap();
+
+        assertEquals(2L, result.get("KG"));
+        assertEquals(1L, result.get("PCS"));
+    }
+
+    @Test
+    @DisplayName("Повинен правильно підраховувати статистику за матеріалом")
+    void shouldCorrectlyAggregateMaterial() {
+
+        StatisticsAggregator aggregator =
+                new StatisticsAggregator("material");
+
+        PurchaseTransaction req1 =
+                new PurchaseTransaction();
+
+        Material material1 =
+                new Material();
+
+        material1.setName("Steel");
+        req1.setMaterial(material1);
+
+        PurchaseTransaction req2 =
+                new PurchaseTransaction();
+
+        Material material2 =
+                new Material();
+
+        material2.setName("Steel");
+        req2.setMaterial(material2);
+
+        PurchaseTransaction req3 =
+                new PurchaseTransaction();
+
+        Material material3 =
+                new Material();
+
+        material3.setName("Wood");
+        req3.setMaterial(material3);
+
+        aggregator.process(req1);
+        aggregator.process(req2);
+        aggregator.process(req3);
+
+        Map<String, Long> result =
+                aggregator.getResultMap();
+
+        assertEquals(2L, result.get("Steel"));
+        assertEquals(1L, result.get("Wood"));
+    }
     @Test
     @DisplayName("Повинен відхиляти непідтримуваний атрибут")
     void shouldRejectUnsupportedAttribute() {
-        StatisticsAggregator aggregator =
-                new StatisticsAggregator("unknown");
-
-        PurchaseTransaction transaction = new PurchaseTransaction();
 
         assertThrows(
                 IllegalArgumentException.class,
+                () -> new StatisticsAggregator("unknown")
+        );
+    }
+    @Test
+    @DisplayName("Повинен безпечно обробляти транзакцію без material")
+    void shouldHandleNullMaterial() {
+
+        StatisticsAggregator aggregator =
+                new StatisticsAggregator("material");
+
+        PurchaseTransaction transaction =
+                new PurchaseTransaction();
+
+        assertDoesNotThrow(
                 () -> aggregator.process(transaction)
+        );
+
+        assertTrue(
+                aggregator.getResultMap().isEmpty()
         );
     }
 }

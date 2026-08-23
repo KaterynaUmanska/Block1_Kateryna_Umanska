@@ -51,4 +51,35 @@ public class XmlReportWriterTest {
 
         assertTrue(paintIndex < woodIndex, "Елемент paint має бути в файлі раніше за wood");
     }
+    @Test
+    @DisplayName("Повинен стабільно сортувати елементи з однаковою кількістю")
+    void shouldSortEqualCountsByValue() throws Exception {
+
+        Map<String, Long> data = new LinkedHashMap<>();
+
+        data.put("wood", 5L);
+        data.put("paint", 5L);
+        data.put("metal", 5L);
+
+        XmlReportWriter writer =
+                new XmlReportWriter();
+
+        writer.generateReport(data, "tags");
+
+        String content =
+                Files.readString(expectedFile.toPath());
+
+        int metalIndex =
+                content.indexOf("<value>metal</value>");
+
+        int paintIndex =
+                content.indexOf("<value>paint</value>");
+
+        int woodIndex =
+                content.indexOf("<value>wood</value>");
+
+        assertTrue(metalIndex < paintIndex);
+        assertTrue(paintIndex < woodIndex);
+    }
+
 }
