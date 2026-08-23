@@ -15,7 +15,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class XmlReportWriterTest {
-    private final File expectedFile = new File("statistics_by_tags.xml");
+    private final File expectedFile = new File("examples/statistics_by_tags.xml");
 
     @AfterEach
     void cleanup() {
@@ -35,18 +35,20 @@ public class XmlReportWriterTest {
 
         XmlReportWriter writer = new XmlReportWriter();
 
-        // Викликаємо ваш метод (він створить statistics_by_tags.xml у кореню)
         writer.generateReport(sortedData, "tags");
 
-        // Перевіряємо, чи файл створився в кореню проєкту
         assertTrue(expectedFile.exists(), "Файл statistics_by_tags.xml мав бути створений");
 
-        // Зчитуємо вміст та перевіряємо наявність тегів і значень
         String content = Files.readString(expectedFile.toPath());
 
         assertTrue(content.contains("<value>paint</value>"));
         assertTrue(content.contains("<count>15</count>"));
         assertTrue(content.contains("<value>wood</value>"));
         assertTrue(content.contains("<count>5</count>"));
+
+        int paintIndex = content.indexOf("<value>paint</value>");
+        int woodIndex = content.indexOf("<value>wood</value>");
+
+        assertTrue(paintIndex < woodIndex, "Елемент paint має бути в файлі раніше за wood");
     }
 }

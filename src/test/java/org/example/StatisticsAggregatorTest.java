@@ -72,4 +72,18 @@ public class StatisticsAggregatorTest {
 
         assertTrue(aggregator.getResultMap().isEmpty());
     }
+
+    @Test
+    @DisplayName("Повинен відхиляти непідтримуваний атрибут")
+    void shouldRejectUnsupportedAttribute() {
+        StatisticsAggregator aggregator =
+                new StatisticsAggregator("unknown");
+
+        PurchaseTransaction transaction = new PurchaseTransaction();
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> aggregator.process(transaction)
+        );
+    }
 }

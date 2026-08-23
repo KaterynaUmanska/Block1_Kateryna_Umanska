@@ -28,7 +28,7 @@ public class StatisticsAggregator {
                 break;
             case "unit":
                 if(req.getMaterial() != null && req.getMaterial().getUnit() != null) {
-                        processMultiValueAttribute(String.valueOf(req.getMaterial().getUnit()));
+                    addCount(String.valueOf(req.getMaterial().getUnit()));
                 }
                 break;
             case "material":
