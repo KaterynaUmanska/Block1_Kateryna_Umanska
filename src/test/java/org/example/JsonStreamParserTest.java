@@ -119,4 +119,5 @@ class JsonStreamParserTest {
                 () -> parser.parseFile(file, transaction -> {})
         );
     }
+
 }

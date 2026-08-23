@@ -21,9 +21,7 @@ import java.util.function.Consumer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class DirectoryProcessorTest {
@@ -77,5 +75,44 @@ class DirectoryProcessorTest {
         processor.processDirectory(tempDir.toString(), "tags", 2);
 
         verifyNoInteractions(parser, xmlWriter);
+    }
+    @Test
+    @DisplayName("Повинен обробляти всі JSON-файли у директорії")
+    void shouldProcessAllJsonFiles(@TempDir Path tempDir) throws Exception {
+        Files.createFile(tempDir.resolve("first.json"));
+        Files.createFile(tempDir.resolve("second.json"));
+        Files.createFile(tempDir.resolve("third.json"));
+
+        DirectoryProcessor processor =
+                new DirectoryProcessor(parser, xmlWriter);
+
+        doAnswer(invocation -> {
+            Consumer<PurchaseTransaction> consumer =
+                    invocation.getArgument(1);
+
+            PurchaseTransaction transaction =
+                    new PurchaseTransaction();
+
+            transaction.setTags("metal");
+
+            consumer.accept(transaction);
+
+            return null;
+        }).when(parser).parseFile(any(File.class), any());
+
+        processor.processDirectory(
+                tempDir.toString(),
+                "tags",
+                2
+        );
+
+        verify(parser, times(3))
+                .parseFile(any(File.class), any());
+
+        verify(xmlWriter)
+                .generateReport(
+                        eq(Map.of("metal", 3L)),
+                        eq("tags")
+                );
     }
 }
