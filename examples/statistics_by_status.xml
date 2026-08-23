@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<statistics>
+  <item>
+    <value>PURCHASED</value>
+    <count>20239</count>
+  </item>
+  <item>
+    <value>APPROVED</value>
+    <count>20025</count>
+  </item>
+  <item>
+    <value>IN_APPROVAL</value>
+    <count>19959</count>
+  </item>
+  <item>
+    <value>CANCELED</value>
+    <count>19912</count>
+  </item>
+  <item>
+    <value>DRAFT</value>
+    <count>19865</count>
+  </item>
+</statistics>
