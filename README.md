@@ -50,11 +50,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <statistics>
   <item>
-    <value>Hardware</value>
+    <value>heavy</value>
     <count>1</count>
   </item>
   <item>
-    <value>IT</value>
+    <value>wood</value>
     <count>1</count>
   </item>
 </statistics>
