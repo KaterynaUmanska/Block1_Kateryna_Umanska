@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.service.DirectoryProcessor;
+
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -11,7 +13,6 @@ public class Main {
         String attribute;
         int threadCount;
 
-        // Перевіряємо: якщо аргументи не передані, зчитуємо дані з консолі
         if (args.length < 2) {
             Scanner scanner = new Scanner(System.in);
 
@@ -38,13 +39,12 @@ public class Main {
                 }
             }
         } else {
-            // Якщо аргументи передані під час запуску через CLI
+
             directoryPath = args[0];
             attribute = args[1];
             threadCount = args.length > 2 ? Integer.parseInt(args[2]) : Runtime.getRuntime().availableProcessors();
         }
 
-        // Запуск обробки
         try {
             System.out.println("\nЗапуск обробки...");
             long startTime = System.currentTimeMillis();

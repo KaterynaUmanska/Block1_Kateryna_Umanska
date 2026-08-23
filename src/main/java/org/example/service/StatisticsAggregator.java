@@ -1,4 +1,4 @@
-package org.example;
+package org.example.service;
 
 import org.example.model.PurchaseRequisition;
 
@@ -47,7 +47,6 @@ public class StatisticsAggregator {
             return;
         }
 
-        // Розбиваємо рядок за комою, очищаємо пробіли та підраховуємо кожен тег
         String[] values = rawValue.split(",");
         for (String val : values) {
             String cleanedValue = val.trim();
@@ -58,7 +57,7 @@ public class StatisticsAggregator {
     }
 
     private void addCount(String key) {
-        // computeIfAbsent гарантує потокобезпечне додавання та збільшення лічильника
+
         statistics.computeIfAbsent(key, k -> new LongAdder()).increment();
     }
 

@@ -1,4 +1,4 @@
-package org.example;
+package org.example.service;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
@@ -20,20 +20,15 @@ public class JsonStreamParser {
     }
 
     public void parseFile(File file, Consumer<PurchaseRequisition> consumer) throws IOException {
-        // Відкриваємо файл як потік для потокового читання
+
         try (JsonParser parser = jsonFactory.createParser(file)) {
 
-            // Перевіряємо, що файл починається з масиву '['
             if (parser.nextToken() != JsonToken.START_ARRAY) {
                 throw new IllegalStateException("Очікувався JSON-масив у файлі: " + file.getName());
             }
 
-            // Просуваємося по файлу токен за токеном
             while (parser.nextToken() == JsonToken.START_OBJECT) {
-                // Мапимо поточний JSON-об'єкт у наш Java-клас
                 PurchaseRequisition requisition = objectMapper.readValue(parser, PurchaseRequisition.class);
-
-                // Передаємо прочитаний об'єкт слухачу (калькулятору)
                 consumer.accept(requisition);
             }
         }

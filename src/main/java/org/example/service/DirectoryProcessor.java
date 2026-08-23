@@ -1,4 +1,4 @@
-package org.example;
+package org.example.service;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.File;
@@ -24,7 +24,6 @@ public class DirectoryProcessor {
             throw new IllegalArgumentException("Вказаний шлях не є директорією: " + directoryPath);
         }
 
-        // Знаходимо всі .json файли у папці
         List<File> jsonFiles;
         try (var stream = Files.list(folder.toPath())) {
             jsonFiles = stream
@@ -38,11 +37,9 @@ public class DirectoryProcessor {
             return;
         }
 
-        // Створюємо агрегатор та пул потоків
         StatisticsAggregator aggregator = new StatisticsAggregator(attribute);
         ExecutorService executor = Executors.newFixedThreadPool(threadCount);
 
-        // Відправляємо кожен файл на обробку в окремий поток
         for (File file : jsonFiles) {
             executor.submit(() -> {
                 try {
@@ -53,7 +50,6 @@ public class DirectoryProcessor {
             });
         }
 
-        // Завершуємо роботу пулу потоків та чекаємо виконання всіх задач
         executor.shutdown();
         if (!executor.awaitTermination(1, TimeUnit.HOURS)) {
             System.err.println("Час очікування обробки файлів вичерпано!");

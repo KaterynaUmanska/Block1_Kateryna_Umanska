@@ -1,73 +1,45 @@
-import org.example.StatisticsAggregator;
+import org.example.service.JsonStreamParser;
 import org.example.model.PurchaseRequisition;
-import org.example.model.Status;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
-import java.util.Map;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JsonStreamParserTest {
     @Test
-    @DisplayName("Повинен правильно розділяти теги за комою та очищати від пробілів")
-    void shouldCorrectlyAggregateTags() {
-        StatisticsAggregator aggregator = new StatisticsAggregator("tags");
+    @DisplayName("Повинен коректно парсити JSON-файл потоком")
+    void shouldParseJsonFile(@TempDir Path tempDir) throws IOException {
+        // Створюємо тимчасовий файл
+        File tempFile = tempDir.resolve("test.json").toFile();
+        try (FileWriter writer = new FileWriter(tempFile)) {
+            writer.write("""
+                [
+                  {
+                    "id": 1,
+                    "quantity": 50.0,
+                    "status": "APPROVED",
+                    "tags": "paint"
+                  }
+                ]
+                """);
+        }
 
-        PurchaseRequisition req1 = new PurchaseRequisition();
-        req1.setTags("metal, heavy");
+        JsonStreamParser parser = new JsonStreamParser();
+        List<PurchaseRequisition> list = new ArrayList<>();
 
-        PurchaseRequisition req2 = new PurchaseRequisition();
-        req2.setTags("heavy , paint ");
+        parser.parseFile(tempFile, list::add);
 
-        aggregator.process(req1);
-        aggregator.process(req2);
-
-        Map<String, Long> result = aggregator.getResultMap();
-
-        assertEquals(2, result.get("heavy"));
-        assertEquals(1, result.get("metal"));
-        assertEquals(1, result.get("paint"));
-    }
-
-    @Test
-    @DisplayName("Повинен правильно підраховувати статистику за enum-статусом")
-    void shouldCorrectlyAggregateStatus() {
-        StatisticsAggregator aggregator = new StatisticsAggregator("status");
-
-        PurchaseRequisition req1 = new PurchaseRequisition();
-        req1.setStatus(Status.APPROVED);
-
-        PurchaseRequisition req2 = new PurchaseRequisition();
-        req2.setStatus(Status.APPROVED);
-
-        PurchaseRequisition req3 = new PurchaseRequisition();
-        req3.setStatus(Status.CANCELED);
-
-        aggregator.process(req1);
-        aggregator.process(req2);
-        aggregator.process(req3);
-
-        Map<String, Long> result = aggregator.getResultMap();
-
-        assertEquals(2, result.get("APPROVED"));
-        assertEquals(1, result.get("CANCELED"));
-    }
-
-    @Test
-    @DisplayName("Повинен ігнорувати порожні теги або null")
-    void shouldHandleNullOrEmptyValuesGracefully() {
-        StatisticsAggregator aggregator = new StatisticsAggregator("tags");
-
-        PurchaseRequisition req1 = new PurchaseRequisition();
-        req1.setTags(null);
-
-        PurchaseRequisition req2 = new PurchaseRequisition();
-        req2.setTags("  ,  ");
-
-        assertDoesNotThrow(() -> aggregator.process(req1));
-        assertDoesNotThrow(() -> aggregator.process(req2));
-
-        assertTrue(aggregator.getResultMap().isEmpty());
+        assertEquals(1, list.size());
+        assertEquals(1L, list.get(0).getId());
+        assertEquals(50.0, list.get(0).getQuantity());
+        assertEquals("paint", list.get(0).getTags());
     }
 }

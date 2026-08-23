@@ -1,4 +1,4 @@
-package org.example;
+package org.example.service;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -12,17 +12,14 @@ public class XmlReportWriter {
     public void generateReport(Map<String, Long> statistics, String attribute) throws IOException, XMLStreamException {
         String fileName = "statistics_by_" + attribute.toLowerCase() + ".xml";
 
-        // Сортування за значенням (Count) від більшого до меншого
         var sortedList = statistics.entrySet().stream()
                 .sorted(Map.Entry.<String, Long>comparingByValue(Comparator.reverseOrder()))
                 .toList();
 
         XMLOutputFactory factory = XMLOutputFactory.newInstance();
-
         try (FileWriter fileWriter = new FileWriter(fileName)) {
             XMLStreamWriter writer = factory.createXMLStreamWriter(fileWriter);
 
-            // Формуємо XML
             writer.writeStartDocument("UTF-8", "1.0");
             writer.writeCharacters("\n");
             writer.writeStartElement("statistics");
@@ -50,13 +47,12 @@ public class XmlReportWriter {
                 writer.writeCharacters("\n");
             }
 
-            writer.writeEndElement(); // </statistics>
+            writer.writeEndElement();
             writer.writeEndDocument();
 
             writer.flush();
             writer.close();
         }
-
         System.out.println("Звіт успішно збережено у файл: " + fileName);
     }
 }
