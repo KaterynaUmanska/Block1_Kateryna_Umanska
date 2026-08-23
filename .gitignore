@@ -5,9 +5,8 @@ target/
 .idea/
 *.iml
 
-# Generated test data
-data/
+# Ігнорувати папки з великими вхідними даними
+/data/
 
-# Generated XML reports
+# Ігнорувати згенеровані XML-звіти результатів
 statistics_by_*.xml
-/.idea/
