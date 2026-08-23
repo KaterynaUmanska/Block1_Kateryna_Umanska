@@ -16,12 +16,12 @@ public class Main {
         if (args.length < 2) {
             Scanner scanner = new Scanner(System.in);
 
-            System.out.println("=== Консольна програма збору статистики ===");
+            System.out.println("Консольна програма збору статистики");
 
             System.out.print("1. Введіть шлях до папки з JSON-файлами: ");
             directoryPath = scanner.nextLine().trim();
 
-            System.out.print("2. Введіть назву атрибута для статистики: ");
+            System.out.print("2. Введіть назву атрибута для статистики: (material, status, tags, units) ");
             attribute = scanner.nextLine().trim();
 
             int availableCores = Runtime.getRuntime().availableProcessors();
@@ -33,6 +33,11 @@ public class Main {
             } else {
                 try {
                     threadCount = Integer.parseInt(threadsInput);
+
+                    if (threadCount <= 0) {
+                        System.out.println("Кількість потоків повинна бути більшою за 0. Використовуємо за замовчуванням: " + availableCores);
+                        threadCount = availableCores;
+                    }
                 } catch (NumberFormatException e) {
                     System.out.println("Некоректне значення потоків. Використовуємо за замовчуванням: " + availableCores);
                     threadCount = availableCores;

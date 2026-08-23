@@ -32,7 +32,6 @@ public class StatisticsAggregator {
                 }
                 break;
             case "material":
-            case "materialname":
                 if (req.getMaterial() != null && req.getMaterial().getName() != null) {
                     addCount(req.getMaterial().getName());
                 }

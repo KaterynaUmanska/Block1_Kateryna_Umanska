@@ -1,3 +1,5 @@
+package org.example;
+
 import org.example.service.DirectoryProcessor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

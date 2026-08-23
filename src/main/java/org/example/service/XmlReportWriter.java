@@ -3,6 +3,7 @@ package org.example.service;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Comparator;
@@ -10,14 +11,25 @@ import java.util.Map;
 
 public class XmlReportWriter {
     public void generateReport(Map<String, Long> statistics, String attribute) throws IOException, XMLStreamException {
+        File outputDirectory = new File("examples");
+
+        if (!outputDirectory.exists() && !outputDirectory.mkdirs()) {
+            throw new IOException("Не вдалося створити директорію examples");
+        }
+
         String fileName = "statistics_by_" + attribute.toLowerCase() + ".xml";
+        File outputFile = new File(outputDirectory, fileName);
 
         var sortedList = statistics.entrySet().stream()
-                .sorted(Map.Entry.<String, Long>comparingByValue(Comparator.reverseOrder()))
+                .sorted(
+                        Map.Entry.<String, Long>comparingByValue(Comparator.reverseOrder())
+                                .thenComparing(Map.Entry.comparingByKey())
+                )
                 .toList();
 
         XMLOutputFactory factory = XMLOutputFactory.newInstance();
-        try (FileWriter fileWriter = new FileWriter(fileName)) {
+
+        try (FileWriter fileWriter = new FileWriter(outputFile)) {
             XMLStreamWriter writer = factory.createXMLStreamWriter(fileWriter);
 
             writer.writeStartDocument("UTF-8", "1.0");
@@ -43,7 +55,7 @@ public class XmlReportWriter {
                 writer.writeCharacters("\n");
 
                 writer.writeCharacters("  ");
-                writer.writeEndElement(); // </item>
+                writer.writeEndElement();
                 writer.writeCharacters("\n");
             }
 
@@ -53,6 +65,8 @@ public class XmlReportWriter {
             writer.flush();
             writer.close();
         }
-        System.out.println("Звіт успішно збережено у файл: " + fileName);
+
+        System.out.println("Звіт успішно збережено у файл: "
+                + outputFile.getPath());
     }
 }

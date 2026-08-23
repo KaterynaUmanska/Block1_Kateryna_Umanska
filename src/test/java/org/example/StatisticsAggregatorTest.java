@@ -1,3 +1,5 @@
+package org.example;
+
 import org.example.service.StatisticsAggregator;
 import org.example.model.PurchaseRequisition;
 import org.example.model.Status;

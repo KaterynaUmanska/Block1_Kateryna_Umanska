@@ -1,3 +1,5 @@
+package org.example;
+
 import org.example.service.JsonStreamParser;
 import org.example.model.PurchaseRequisition;
 import org.junit.jupiter.api.DisplayName;
