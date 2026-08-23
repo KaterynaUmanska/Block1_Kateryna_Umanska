@@ -1,0 +1,38 @@
+[
+  {
+    "id": 104,
+    "material": {
+      "id": 1,
+      "name": "Red Paint",
+      "unit": "LITERS",
+      "description": "Acrylic red paint"
+    },
+    "quantity": 50.0,
+    "status": "PURCHASED",
+    "tags": "paint, urgent"
+  },
+  {
+    "id": 105,
+    "material": {
+      "id": 4,
+      "name": "Glue",
+      "unit": "KG",
+      "description": "Industrial epoxy"
+    },
+    "quantity": 10.0,
+    "status": "CANCELED",
+    "tags": "chem, hazardous"
+  },
+  {
+    "id": 106,
+    "material": {
+      "id": 2,
+      "name": "Steel Rod",
+      "unit": "METERS",
+      "description": "10mm steel bar"
+    },
+    "quantity": 200.0,
+    "status": "IN_APPROVAL",
+    "tags": "metal, heavy"
+  }
+]

@@ -1,0 +1,70 @@
+package org.example;
+
+import org.example.model.PurchaseRequisition;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.LongAdder;
+
+public class StatisticsAggregator {
+    private final String targetAttribute;
+    private final Map<String, LongAdder> statistics = new ConcurrentHashMap<>();
+
+    public StatisticsAggregator(String targetAttribute) {
+        this.targetAttribute = targetAttribute;
+    }
+
+    public void process(PurchaseRequisition req) {
+        if (req == null) return;
+
+        switch (targetAttribute.toLowerCase()) {
+            case "tags":
+                processMultiValueAttribute(req.getTags());
+                break;
+            case "status":
+                if (req.getStatus() != null) {
+                    addCount(req.getStatus().name());
+                }
+                break;
+            case "units":
+                if(req.getMaterial() != null && req.getMaterial().getUnit() != null) {
+                        processMultiValueAttribute(String.valueOf(req.getMaterial().getUnit()));
+                }
+                break;
+            case "material":
+            case "materialname":
+                if (req.getMaterial() != null && req.getMaterial().getName() != null) {
+                    addCount(req.getMaterial().getName());
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Непідтримуваний атрибут: " + targetAttribute);
+        }
+    }
+
+    private void processMultiValueAttribute(String rawValue) {
+        if (rawValue == null || rawValue.trim().isEmpty()) {
+            return;
+        }
+
+        // Розбиваємо рядок за комою, очищаємо пробіли та підраховуємо кожен тег
+        String[] values = rawValue.split(",");
+        for (String val : values) {
+            String cleanedValue = val.trim();
+            if (!cleanedValue.isEmpty()) {
+                addCount(cleanedValue);
+            }
+        }
+    }
+
+    private void addCount(String key) {
+        // computeIfAbsent гарантує потокобезпечне додавання та збільшення лічильника
+        statistics.computeIfAbsent(key, k -> new LongAdder()).increment();
+    }
+
+    public Map<String, Long> getResultMap() {
+        Map<String, Long> result = new ConcurrentHashMap<>();
+        statistics.forEach((key, adder) -> result.put(key, adder.sum()));
+        return result;
+    }
+}

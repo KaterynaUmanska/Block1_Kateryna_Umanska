@@ -1,9 +1,9 @@
-package model;
+package org.example.model;
 
 public enum Status {
     DRAFT,
-    CREATED,
     IN_APPROVAL,
+    APPROVED,
     PURCHASED,
     CANCELED;
 }
