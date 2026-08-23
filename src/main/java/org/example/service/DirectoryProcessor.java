@@ -17,11 +17,16 @@ import java.util.concurrent.TimeUnit;
 public class DirectoryProcessor {
 
     private final JsonStreamParser parser;
+    private final XmlReportWriter xmlWriter;
 
     public DirectoryProcessor() {
-        this.parser = new JsonStreamParser();
+        this(new JsonStreamParser(), new XmlReportWriter());
     }
 
+    public DirectoryProcessor(JsonStreamParser parser, XmlReportWriter xmlWriter) {
+        this.parser = parser;
+        this.xmlWriter = xmlWriter;
+    }
     public void processDirectory(
             String directoryPath,
             String attribute,
@@ -71,9 +76,7 @@ public class DirectoryProcessor {
 
         Map<String, Long> resultMap = aggregator.getResultMap();
 
-        XmlReportWriter xmlWriter = new XmlReportWriter();
-
-        xmlWriter.generateReport(
+        this.xmlWriter.generateReport(
                 resultMap,
                 attribute
         );
