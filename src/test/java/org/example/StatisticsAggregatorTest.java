@@ -1,7 +1,7 @@
 package org.example;
 
 import org.example.service.StatisticsAggregator;
-import org.example.model.PurchaseRequisition;
+import org.example.model.PurchaseTransaction;
 import org.example.model.Status;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,10 +16,10 @@ public class StatisticsAggregatorTest {
     void shouldCorrectlyAggregateTags() {
         StatisticsAggregator aggregator = new StatisticsAggregator("tags");
 
-        PurchaseRequisition req1 = new PurchaseRequisition();
+        PurchaseTransaction req1 = new PurchaseTransaction();
         req1.setTags("metal, heavy");
 
-        PurchaseRequisition req2 = new PurchaseRequisition();
+        PurchaseTransaction req2 = new PurchaseTransaction();
         req2.setTags("heavy , paint ");
 
         aggregator.process(req1);
@@ -37,13 +37,13 @@ public class StatisticsAggregatorTest {
     void shouldCorrectlyAggregateStatus() {
         StatisticsAggregator aggregator = new StatisticsAggregator("status");
 
-        PurchaseRequisition req1 = new PurchaseRequisition();
+        PurchaseTransaction req1 = new PurchaseTransaction();
         req1.setStatus(Status.APPROVED);
 
-        PurchaseRequisition req2 = new PurchaseRequisition();
+        PurchaseTransaction req2 = new PurchaseTransaction();
         req2.setStatus(Status.APPROVED);
 
-        PurchaseRequisition req3 = new PurchaseRequisition();
+        PurchaseTransaction req3 = new PurchaseTransaction();
         req3.setStatus(Status.CANCELED);
 
         aggregator.process(req1);
@@ -61,10 +61,10 @@ public class StatisticsAggregatorTest {
     void shouldHandleNullOrEmptyValuesGracefully() {
         StatisticsAggregator aggregator = new StatisticsAggregator("tags");
 
-        PurchaseRequisition req1 = new PurchaseRequisition();
+        PurchaseTransaction req1 = new PurchaseTransaction();
         req1.setTags(null);
 
-        PurchaseRequisition req2 = new PurchaseRequisition();
+        PurchaseTransaction req2 = new PurchaseTransaction();
         req2.setTags("  ,  ");
 
         assertDoesNotThrow(() -> aggregator.process(req1));

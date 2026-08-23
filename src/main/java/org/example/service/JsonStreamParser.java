@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.model.PurchaseRequisition;
+import org.example.model.PurchaseTransaction;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +19,7 @@ public class JsonStreamParser {
         this.jsonFactory = objectMapper.getFactory();
     }
 
-    public void parseFile(File file, Consumer<PurchaseRequisition> consumer) throws IOException {
+    public void parseFile(File file, Consumer<PurchaseTransaction> consumer) throws IOException {
 
         try (JsonParser parser = jsonFactory.createParser(file)) {
 
@@ -28,7 +28,7 @@ public class JsonStreamParser {
             }
 
             while (parser.nextToken() == JsonToken.START_OBJECT) {
-                PurchaseRequisition requisition = objectMapper.readValue(parser, PurchaseRequisition.class);
+                PurchaseTransaction requisition = objectMapper.readValue(parser, PurchaseTransaction.class);
                 consumer.accept(requisition);
             }
         }

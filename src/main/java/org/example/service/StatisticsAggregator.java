@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.model.PurchaseRequisition;
+import org.example.model.PurchaseTransaction;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,7 +14,7 @@ public class StatisticsAggregator {
         this.targetAttribute = targetAttribute;
     }
 
-    public void process(PurchaseRequisition req) {
+    public void process(PurchaseTransaction req) {
         if (req == null) return;
 
         switch (targetAttribute.toLowerCase()) {
@@ -26,7 +26,7 @@ public class StatisticsAggregator {
                     addCount(req.getStatus().name());
                 }
                 break;
-            case "units":
+            case "unit":
                 if(req.getMaterial() != null && req.getMaterial().getUnit() != null) {
                         processMultiValueAttribute(String.valueOf(req.getMaterial().getUnit()));
                 }

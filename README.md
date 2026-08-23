@@ -8,7 +8,7 @@
 
 Проєкт побудований на принципах об'єктно-орієнтованого програмування та демонструє зв'язок між сутностями:
 
-PurchaseRequisition (Заявка на закупівлю) - основна сутність, що містить інформацію про закупівлю. Поля: `id` (Long), `material` (`Material` - вкладений об'єкт), `quantity` (Double), `status` (`Status` - Enum: DRAFT, IN_APPROVAL, APPROVED, CANCELED), `tags` (String - текстові теги через кому).
+PurchaseTransaction (Транзакція закупівлі) - основна сутність, що містить інформацію про окрему операцію закупівлі. Поля: `id` (Long), `material` (`Material` - вкладений об'єкт), `quantity` (Double), `status` (`Status` - Enum: DRAFT, IN_APPROVAL, APPROVED, CANCELED), `tags` (String - текстові теги через кому).
 Material (Матеріал) - другорядна сутність. Поля: `id` (Long), `name` (String), `unit` (`Unit` - Enum: KG, PCS, METERS, LITERS), `description` (String).
 
 Зв'язок між сутностями: Багато-до-одного (Many-to-One) — багато заявок на закупівлю посилаються на один і той самий матеріал. Кожна окрема заявка містить один конкретний матеріал.
@@ -61,7 +61,7 @@ Material (Матеріал) - другорядна сутність. Поля: `
 
 * `tags`
 * `status`
-* `units`
+* `unit`
 * `material`
 
 ---

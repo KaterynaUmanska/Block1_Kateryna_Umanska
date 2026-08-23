@@ -1,7 +1,7 @@
 package org.example;
 
 import org.example.service.JsonStreamParser;
-import org.example.model.PurchaseRequisition;
+import org.example.model.PurchaseTransaction;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -35,7 +35,7 @@ public class JsonStreamParserTest {
         }
 
         JsonStreamParser parser = new JsonStreamParser();
-        List<PurchaseRequisition> list = new ArrayList<>();
+        List<PurchaseTransaction> list = new ArrayList<>();
 
         parser.parseFile(tempFile, list::add);
 

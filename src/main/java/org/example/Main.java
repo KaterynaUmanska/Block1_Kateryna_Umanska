@@ -21,7 +21,7 @@ public class Main {
             System.out.print("1. Введіть шлях до папки з JSON-файлами: ");
             directoryPath = scanner.nextLine().trim();
 
-            System.out.print("2. Введіть назву атрибута для статистики: (material, status, tags, units) ");
+            System.out.print("2. Введіть назву атрибута для статистики: (material, status, tags, unit) ");
             attribute = scanner.nextLine().trim();
 
             int availableCores = Runtime.getRuntime().availableProcessors();
