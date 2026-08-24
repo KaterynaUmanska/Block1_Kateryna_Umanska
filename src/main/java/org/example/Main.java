@@ -15,148 +15,81 @@ public class Main {
             String directoryPath = "data";
             String attribute;
             int threadCount;
+            int availableCores = Runtime.getRuntime().availableProcessors();
 
             if (args.length < 2) {
                 Scanner scanner = new Scanner(System.in);
 
                 System.out.println("Консольна програма збору статистики");
-
-                System.out.print(
-                        "Введіть назву атрибута для статистики " +
-                                "(material, status, tags, unit): "
-                );
+                System.out.print("Введіть назву атрибута для статистики (material, status, tags, unit): ");
                 attribute = scanner.nextLine().trim();
 
-                int availableCores =
-                        Runtime.getRuntime().availableProcessors();
+                System.out.print("Введіть кількість потоків (натисніть Enter для значення за замовчуванням: " + availableCores + "): ");
+                String threadsInput = scanner.nextLine().trim();
 
-                System.out.print(
-                        "Введіть кількість потоків " +
-                                "(натисніть Enter для значення за замовчуванням: "
-                                + availableCores + "): "
-                );
-
-                String threadsInput =
-                        scanner.nextLine().trim();
-
-                threadCount =
-                        parseThreadCount(
-                                threadsInput,
-                                availableCores
-                        );
-
+                threadCount = parseThreadCount(threadsInput, availableCores);
             } else {
                 directoryPath = args[0].trim();
                 attribute = args[1].trim();
 
-                int availableCores =
-                        Runtime.getRuntime().availableProcessors();
-
-                threadCount =
-                        args.length >= 3
-                                ? parseThreadCount(
-                                args[2],
-                                availableCores
-                        )
-                                : availableCores;
+                threadCount = args.length >= 3
+                        ? parseThreadCount(args[2], availableCores)
+                        : availableCores;
             }
 
             System.out.println("\nЗапуск обробки...");
 
-            long startTime =
-                    System.currentTimeMillis();
+            long startTime = System.currentTimeMillis();
+            DirectoryProcessor processor = new DirectoryProcessor();
 
-            DirectoryProcessor processor =
-                    new DirectoryProcessor();
+            processor.processDirectory(directoryPath, attribute, threadCount);
 
-            processor.processDirectory(
-                    directoryPath,
-                    attribute,
-                    threadCount
-            );
-
-            long endTime =
-                    System.currentTimeMillis();
-
-            System.out.println(
-                    "Загальний час виконання (" +
-                            threadCount +
-                            " потоків): " +
-                            (endTime - startTime) +
-                            " ms"
-            );
+            long endTime = System.currentTimeMillis();
+            System.out.println("Загальний час виконання (" + threadCount + " потоків): " + (endTime - startTime) + " ms");
 
         } catch (Exception e) {
-            System.err.println(
-                    "Помилка під час виконання програми: "
-                            + e.getMessage()
-            );
+            System.err.println("Помилка під час виконання програми: " + e.getMessage());
         }
     }
 
     private static void generateDataIfNeeded() {
-        File dataDirectory =
-                new File("data");
+        File dataDirectory = new File("data");
 
         if (!hasJsonFiles(dataDirectory)) {
-            System.out.println(
-                    "Вхідні дані не знайдено. " +
-                            "Запускаємо генерацію тестових даних..."
-            );
-
+            System.out.println("Вхідні дані не знайдено. Запускаємо генерацію тестових даних...");
             DataGenerator.generateData();
         }
     }
 
-    private static boolean hasJsonFiles(
-            File dataDirectory
-    ) {
+    private static boolean hasJsonFiles(File dataDirectory) {
         if (!dataDirectory.isDirectory()) {
             return false;
         }
 
-        File[] jsonFiles =
-                dataDirectory.listFiles(
-                        (directory, name) ->
-                                name.toLowerCase()
-                                        .endsWith(".json")
-                );
+        File[] jsonFiles = dataDirectory.listFiles(
+                (directory, name) -> name.toLowerCase().endsWith(".json")
+        );
 
-        return jsonFiles != null
-                && jsonFiles.length > 0;
+        return jsonFiles != null && jsonFiles.length > 0;
     }
 
-    private static int parseThreadCount(
-            String input,
-            int defaultValue
-    ) {
+    private static int parseThreadCount(String input, int defaultValue) {
         if (input == null || input.isBlank()) {
             return defaultValue;
         }
 
         try {
-            int threadCount =
-                    Integer.parseInt(input);
+            int threadCount = Integer.parseInt(input);
 
             if (threadCount <= 0) {
-                System.out.println(
-                        "Кількість потоків повинна бути більшою за 0. "
-                                + "Використовуємо значення за замовчуванням: "
-                                + defaultValue
-                );
-
+                System.out.println("Кількість потоків повинна бути більшою за 0. Використовуємо значення за замовчуванням: " + defaultValue);
                 return defaultValue;
             }
 
             return threadCount;
 
         } catch (NumberFormatException e) {
-            System.out.println(
-                    "Некоректне значення потоків. "
-                            + "Використовуємо значення за замовчуванням: "
-                            + defaultValue
-            );
-
+            System.out.println("Некоректне значення потоків. Використовуємо значення за замовчуванням: " + defaultValue);
             return defaultValue;
         }
     }

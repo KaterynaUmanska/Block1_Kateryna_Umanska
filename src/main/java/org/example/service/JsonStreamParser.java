@@ -20,20 +20,12 @@ public class JsonStreamParser {
         this.jsonFactory = objectMapper.getFactory();
     }
 
-    public void parseFile(
-            File file,
-            Consumer<PurchaseTransaction> consumer
-    ) throws IOException {
-
+    public void parseFile(File file, Consumer<PurchaseTransaction> consumer) throws IOException {
         try (JsonParser parser = jsonFactory.createParser(file)) {
-
             JsonToken firstToken = parser.nextToken();
 
             if (firstToken != JsonToken.START_ARRAY) {
-                throw new IllegalStateException(
-                        "Очікувався JSON-масив у файлі: "
-                                + file.getName()
-                );
+                throw new IllegalStateException("Очікувався JSON-масив у файлі: " + file.getName());
             }
 
             while (true) {
@@ -44,27 +36,15 @@ public class JsonStreamParser {
                 }
 
                 if (token != JsonToken.START_OBJECT) {
-                    throw new IllegalStateException(
-                            "Очікувався JSON-об'єкт у масиві файлу: "
-                                    + file.getName()
-                    );
+                    throw new IllegalStateException("Очікувався JSON-об'єкт у масиві файлу: " + file.getName());
                 }
 
-                PurchaseTransaction transaction =
-                        objectMapper.readValue(
-                                parser,
-                                PurchaseTransaction.class
-                        );
-
+                PurchaseTransaction transaction = objectMapper.readValue(parser, PurchaseTransaction.class);
                 consumer.accept(transaction);
             }
 
             if (parser.nextToken() != null) {
-                throw new IllegalStateException(
-                        "Після завершення JSON-масиву знайдено "
-                                + "додаткові дані у файлі: "
-                                + file.getName()
-                );
+                throw new IllegalStateException("Після завершення JSON-масиву знайдено додаткові дані у файлі: " + file.getName());
             }
         }
     }

@@ -10,27 +10,15 @@ import java.util.Random;
 public class DataGenerator {
 
     private static final String[] TAGS = {
-            "metal",
-            "heavy",
-            "paint",
-            "urgent",
-            "wood",
-            "fragile",
-            "chem"
+            "metal", "heavy", "paint", "urgent", "wood", "fragile", "chem"
     };
 
     private static final String[] STATUSES = {
-            "PENDING",
-            "APPROVED",
-            "PURCHASED",
-            "CANCELED"
+            "PENDING", "APPROVED", "PURCHASED", "CANCELED"
     };
 
     private static final String[] UNITS = {
-            "KG",
-            "METERS",
-            "PCS",
-            "LITERS"
+            "KG", "METERS", "PCS", "LITERS"
     };
 
     private static final int FILES_COUNT = 10;
@@ -40,157 +28,83 @@ public class DataGenerator {
     public static void main(String[] args) {
         generateData();
     }
+
     public static void generateData() {
+        File dataDirectory = new File("data");
 
-            File dataDirectory =
-                    new File("data");
-
-        if (!dataDirectory.exists()
-                && !dataDirectory.mkdirs()) {
-
-            System.err.println(
-                    "Не вдалося створити папку data."
-            );
-
+        if (!dataDirectory.exists() && !dataDirectory.mkdirs()) {
+            System.err.println("Не вдалося створити папку data.");
             return;
         }
 
         Random random = new Random();
 
-        for (int fileNumber = 1;
-             fileNumber <= FILES_COUNT;
-             fileNumber++) {
+        for (int fileNumber = 1; fileNumber <= FILES_COUNT; fileNumber++) {
+            File file = new File(dataDirectory, "data_part_" + fileNumber + ".json");
 
-            File file =
-                    new File(
-                            dataDirectory,
-                            "data_part_" +
-                                    fileNumber +
-                                    ".json"
-                    );
-
-            try (
-                    BufferedWriter writer =
-                            new BufferedWriter(
-                                    new FileWriter(file)
-                            )
-            ) {
-
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
                 writer.write("[\n");
 
-                for (int recordNumber = 1;
-                     recordNumber <= RECORDS_PER_FILE;
-                     recordNumber++) {
+                for (int recordNumber = 1; recordNumber <= RECORDS_PER_FILE; recordNumber++) {
+                    int materialId = random.nextInt(MATERIALS_COUNT) + 1;
+                    String status = STATUSES[random.nextInt(STATUSES.length)];
+                    String unit = UNITS[random.nextInt(UNITS.length)];
+                    String tags = generateTags(random);
 
-                    int materialId =
-                            random.nextInt(MATERIALS_COUNT) + 1;
+                    long transactionId = (long) (fileNumber - 1) * RECORDS_PER_FILE + recordNumber;
+                    double quantity = 1.0 + random.nextDouble() * 100;
+                    String comma = (recordNumber == RECORDS_PER_FILE) ? "" : ",";
 
-                    String status =
-                            STATUSES[
-                                    random.nextInt(
-                                            STATUSES.length
-                                    )
-                                    ];
-
-                    String unit =
-                            UNITS[
-                                    random.nextInt(
-                                            UNITS.length
-                                    )
-                                    ];
-
-                    String tags =
-                            generateTags(random);
-
-                    long transactionId =
-                            (long) (fileNumber - 1)
-                                    * RECORDS_PER_FILE
-                                    + recordNumber;
-
-                    String jsonObject =
-                            String.format(
-                                    Locale.US,
-                                    """
-                                    {
-                                      "id": %d,
-                                      "material": {
-                                        "id": %d,
-                                        "name": "Material_%d",
-                                        "unit": "%s"
-                                      },
-                                      "quantity": %.1f,
-                                      "status": "%s",
-                                      "tags": "%s"
-                                    }%s
-                                    """,
-                                    transactionId,
-                                    materialId,
-                                    materialId,
-                                    unit,
-                                    1.0 +
-                                            random.nextDouble()
-                                                    * 100,
-                                    status,
-                                    tags,
-                                    recordNumber ==
-                                            RECORDS_PER_FILE
-                                            ? ""
-                                            : ","
-                            );
+                    String jsonObject = String.format(
+                            Locale.US,
+                            """
+                            {
+                              "id": %d,
+                              "material": {
+                                "id": %d,
+                                "name": "Material_%d",
+                                "unit": "%s"
+                              },
+                              "quantity": %.1f,
+                              "status": "%s",
+                              "tags": "%s"
+                            }%s
+                            """,
+                            transactionId,
+                            materialId,
+                            materialId,
+                            unit,
+                            quantity,
+                            status,
+                            tags,
+                            comma
+                    );
 
                     writer.write(jsonObject);
                 }
 
                 writer.write("]\n");
-
-                System.out.println(
-                        "Згенеровано файл: " +
-                                file.getName()
-                );
+                System.out.println("Згенеровано файл: " + file.getName());
 
             } catch (IOException e) {
-                System.err.println(
-                        "Помилка генерації файлу " +
-                                file.getName() +
-                                ": " +
-                                e.getMessage()
-                );
+                System.err.println("Помилка генерації файлу " + file.getName() + ": " + e.getMessage());
             }
         }
 
-        System.out.println(
-                "Генерація завершена! " +
-                        "Папка 'data' готова до тестування."
-        );
+        System.out.println("Генерація завершена! Папка 'data' готова до тестування.");
     }
 
-    private static String generateTags(
-            Random random
-    ) {
-
-        int tagCount =
-                random.nextInt(2) + 1;
-
-        String firstTag =
-                TAGS[
-                        random.nextInt(
-                                TAGS.length
-                        )
-                        ];
+    private static String generateTags(Random random) {
+        int tagCount = random.nextInt(2) + 1;
+        String firstTag = TAGS[random.nextInt(TAGS.length)];
 
         if (tagCount == 1) {
             return firstTag;
         }
 
         String secondTag;
-
         do {
-            secondTag =
-                    TAGS[
-                            random.nextInt(
-                                    TAGS.length
-                            )
-                            ];
+            secondTag = TAGS[random.nextInt(TAGS.length)];
         } while (firstTag.equals(secondTag));
 
         return firstTag + ", " + secondTag;

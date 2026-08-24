@@ -12,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
@@ -38,7 +37,6 @@ class DirectoryProcessorTest {
         Files.createFile(tempDir.resolve("test.json"));
 
         DirectoryProcessor processor = new DirectoryProcessor(parser, xmlWriter);
-
         PurchaseTransaction transaction = new PurchaseTransaction();
 
         doAnswer(invocation -> {
@@ -76,6 +74,7 @@ class DirectoryProcessorTest {
 
         verifyNoInteractions(parser, xmlWriter);
     }
+
     @Test
     @DisplayName("Повинен обробляти всі JSON-файли у директорії")
     void shouldProcessAllJsonFiles(@TempDir Path tempDir) throws Exception {
@@ -83,36 +82,19 @@ class DirectoryProcessorTest {
         Files.createFile(tempDir.resolve("second.json"));
         Files.createFile(tempDir.resolve("third.json"));
 
-        DirectoryProcessor processor =
-                new DirectoryProcessor(parser, xmlWriter);
+        DirectoryProcessor processor = new DirectoryProcessor(parser, xmlWriter);
 
         doAnswer(invocation -> {
-            Consumer<PurchaseTransaction> consumer =
-                    invocation.getArgument(1);
-
-            PurchaseTransaction transaction =
-                    new PurchaseTransaction();
-
+            Consumer<PurchaseTransaction> consumer = invocation.getArgument(1);
+            PurchaseTransaction transaction = new PurchaseTransaction();
             transaction.setTags("metal");
-
             consumer.accept(transaction);
-
             return null;
         }).when(parser).parseFile(any(File.class), any());
 
-        processor.processDirectory(
-                tempDir.toString(),
-                "tags",
-                2
-        );
+        processor.processDirectory(tempDir.toString(), "tags", 2);
 
-        verify(parser, times(3))
-                .parseFile(any(File.class), any());
-
-        verify(xmlWriter)
-                .generateReport(
-                        eq(Map.of("metal", 3L)),
-                        eq("tags")
-                );
+        verify(parser, times(3)).parseFile(any(File.class), any());
+        verify(xmlWriter).generateReport(eq(Map.of("metal", 3L)), eq("tags"));
     }
 }

@@ -27,29 +27,21 @@ public class DirectoryProcessor {
         this.parser = parser;
         this.xmlWriter = xmlWriter;
     }
-    public void processDirectory(
-            String directoryPath,
-            String attribute,
-            int threadCount
-    ) throws InterruptedException, IOException, XMLStreamException {
+
+    public void processDirectory(String directoryPath, String attribute, int threadCount)
+            throws InterruptedException, IOException, XMLStreamException {
 
         File folder = new File(directoryPath);
-
         validateDirectory(folder);
 
         List<File> jsonFiles = findJsonFiles(folder);
-
         if (jsonFiles.isEmpty()) {
             System.out.println("JSON-файлів у папці не знайдено.");
             return;
         }
 
-        StatisticsAggregator aggregator =
-                new StatisticsAggregator(attribute);
-
-        ExecutorService executor =
-                Executors.newFixedThreadPool(threadCount);
-
+        StatisticsAggregator aggregator = new StatisticsAggregator(attribute);
+        ExecutorService executor = Executors.newFixedThreadPool(threadCount);
         List<Future<Void>> futures = new ArrayList<>();
 
         try {
@@ -58,14 +50,11 @@ public class DirectoryProcessor {
                     parser.parseFile(file, aggregator::process);
                     return null;
                 });
-
                 futures.add(future);
             }
 
             executor.shutdown();
-
             waitForTasks(executor);
-
             checkTaskResults(futures);
 
         } finally {
@@ -75,19 +64,12 @@ public class DirectoryProcessor {
         }
 
         Map<String, Long> resultMap = aggregator.getResultMap();
-
-        this.xmlWriter.generateReport(
-                resultMap,
-                attribute
-        );
+        this.xmlWriter.generateReport(resultMap, attribute);
     }
 
     private void validateDirectory(File folder) {
         if (!folder.exists() || !folder.isDirectory()) {
-            throw new IllegalArgumentException(
-                    "Вказаний шлях не є директорією: "
-                            + folder.getPath()
-            );
+            throw new IllegalArgumentException("Вказаний шлях не є директорією: " + folder.getPath());
         }
     }
 
@@ -101,47 +83,25 @@ public class DirectoryProcessor {
         }
     }
 
-    private void waitForTasks(
-            ExecutorService executor
-    ) throws InterruptedException {
-
-        boolean completed = executor.awaitTermination(
-                1,
-                TimeUnit.HOURS
-        );
+    private void waitForTasks(ExecutorService executor) throws InterruptedException {
+        boolean completed = executor.awaitTermination(1, TimeUnit.HOURS);
 
         if (!completed) {
             executor.shutdownNow();
-
-            throw new IllegalStateException(
-                    "Час очікування обробки файлів вичерпано"
-            );
+            throw new IllegalStateException("Час очікування обробки файлів вичерпано");
         }
     }
 
-    private void checkTaskResults(
-            List<Future<Void>> futures
-    ) throws IOException {
-
+    private void checkTaskResults(List<Future<Void>> futures) throws IOException {
         for (Future<Void> future : futures) {
             try {
                 future.get();
-
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-
-                throw new IOException(
-                        "Обробку файлів було перервано",
-                        e
-                );
-
+                throw new IOException("Обробку файлів було перервано", e);
             } catch (ExecutionException e) {
                 Throwable cause = e.getCause();
-
-                throw new IOException(
-                        "Помилка під час обробки JSON-файлу",
-                        cause
-                );
+                throw new IOException("Помилка під час обробки JSON-файлу", cause);
             }
         }
     }
