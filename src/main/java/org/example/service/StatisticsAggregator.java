@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.model.PurchaseTransaction;
+import org.example.model.PurchaseRecord;
 
 import java.util.Locale;
 import java.util.Map;
@@ -32,7 +32,7 @@ public class StatisticsAggregator {
         }
     }
 
-    public void process(PurchaseTransaction transaction) {
+    public void process(PurchaseRecord transaction) {
         if (transaction == null) {
             return;
         }

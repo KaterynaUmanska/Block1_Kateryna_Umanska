@@ -1,6 +1,6 @@
 package org.example;
 
-import org.example.model.PurchaseTransaction;
+import org.example.model.PurchaseRecord;
 import org.example.model.Status;
 import org.example.model.Unit;
 import org.example.service.JsonStreamParser;
@@ -43,13 +43,13 @@ class JsonStreamParserTest {
         }
 
         JsonStreamParser parser = new JsonStreamParser();
-        List<PurchaseTransaction> list = new ArrayList<>();
+        List<PurchaseRecord> list = new ArrayList<>();
 
         parser.parseFile(tempFile, list::add);
 
         assertEquals(1, list.size());
 
-        PurchaseTransaction transaction = list.get(0);
+        PurchaseRecord transaction = list.get(0);
         assertEquals(1L, transaction.getId());
         assertEquals(50.0, transaction.getQuantity());
         assertEquals(Status.APPROVED, transaction.getStatus());

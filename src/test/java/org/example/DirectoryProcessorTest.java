@@ -1,6 +1,6 @@
 package org.example;
 
-import org.example.model.PurchaseTransaction;
+import org.example.model.PurchaseRecord;
 import org.example.service.DirectoryProcessor;
 import org.example.service.JsonStreamParser;
 import org.example.service.XmlReportWriter;
@@ -37,10 +37,10 @@ class DirectoryProcessorTest {
         Files.createFile(tempDir.resolve("test.json"));
 
         DirectoryProcessor processor = new DirectoryProcessor(parser, xmlWriter);
-        PurchaseTransaction transaction = new PurchaseTransaction();
+        PurchaseRecord transaction = new PurchaseRecord();
 
         doAnswer(invocation -> {
-            Consumer<PurchaseTransaction> consumer = invocation.getArgument(1);
+            Consumer<PurchaseRecord> consumer = invocation.getArgument(1);
             consumer.accept(transaction);
             return null;
         }).when(parser).parseFile(any(File.class), any());
@@ -85,8 +85,8 @@ class DirectoryProcessorTest {
         DirectoryProcessor processor = new DirectoryProcessor(parser, xmlWriter);
 
         doAnswer(invocation -> {
-            Consumer<PurchaseTransaction> consumer = invocation.getArgument(1);
-            PurchaseTransaction transaction = new PurchaseTransaction();
+            Consumer<PurchaseRecord> consumer = invocation.getArgument(1);
+            PurchaseRecord transaction = new PurchaseRecord();
             transaction.setTags("metal");
             consumer.accept(transaction);
             return null;

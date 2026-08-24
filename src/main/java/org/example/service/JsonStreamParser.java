@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.model.PurchaseTransaction;
+import org.example.model.PurchaseRecord;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class JsonStreamParser {
         this.jsonFactory = objectMapper.getFactory();
     }
 
-    public void parseFile(File file, Consumer<PurchaseTransaction> consumer) throws IOException {
+    public void parseFile(File file, Consumer<PurchaseRecord> consumer) throws IOException {
         try (JsonParser parser = jsonFactory.createParser(file)) {
             JsonToken firstToken = parser.nextToken();
 
@@ -39,7 +39,7 @@ public class JsonStreamParser {
                     throw new IllegalStateException("Очікувався JSON-об'єкт у масиві файлу: " + file.getName());
                 }
 
-                PurchaseTransaction transaction = objectMapper.readValue(parser, PurchaseTransaction.class);
+                PurchaseRecord transaction = objectMapper.readValue(parser, PurchaseRecord.class);
                 consumer.accept(transaction);
             }
 

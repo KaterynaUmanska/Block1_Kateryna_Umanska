@@ -1,17 +1,17 @@
 package org.example.model;
 
-public class PurchaseTransaction {
+public class PurchaseRecord {
     private Long id;
     private Material material;
     private Double quantity;
     private Status status;
     private String tags;
 
-    public PurchaseTransaction() {
+    public PurchaseRecord() {
 
     }
 
-    public PurchaseTransaction(Long id, Material material, Double quantity, Status status, String tags) {
+    public PurchaseRecord(Long id, Material material, Double quantity, Status status, String tags) {
         this.id = id;
         this.material = material;
         this.quantity = quantity;
