@@ -4,22 +4,24 @@ import org.example.service.XmlReportWriter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 
-import javax.xml.stream.XMLStreamException;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class XmlReportWriterTest {
-    private final File expectedFile = new File("statistics_by_tags.xml");
+
+    private final File expectedFile =
+            new File("statistics_by_tags.xml");
 
     @AfterEach
     void cleanup() {
-        // Видаляємо згенерований тестом файл після кожного запуску
         if (expectedFile.exists()) {
             expectedFile.delete();
         }
@@ -27,30 +29,60 @@ public class XmlReportWriterTest {
 
     @Test
     @DisplayName("Повинен правильно записувати статистику у XML-файл")
-    void shouldWriteStatisticsToXml() throws IOException, XMLStreamException {
-        // Створюємо тестові дані
-        Map<String, Long> sortedData = new LinkedHashMap<>();
-        sortedData.put("paint", 15L);
-        sortedData.put("wood", 5L);
+    void shouldWriteStatisticsToXml() throws Exception {
+
+        Map<String, Long> data = new LinkedHashMap<>();
+        data.put("paint", 15L);
+        data.put("wood", 5L);
 
         XmlReportWriter writer = new XmlReportWriter();
 
-        writer.generateReport(sortedData, "tags");
+        writer.generateReport(data, "tags");
 
-        assertTrue(expectedFile.exists(), "Файл statistics_by_tags.xml мав бути створений");
+        assertTrue(
+                expectedFile.exists(),
+                "Файл statistics_by_tags.xml мав бути створений"
+        );
 
-        String content = Files.readString(expectedFile.toPath());
+        Document document = parseXml(expectedFile);
 
-        assertTrue(content.contains("<value>paint</value>"));
-        assertTrue(content.contains("<count>15</count>"));
-        assertTrue(content.contains("<value>wood</value>"));
-        assertTrue(content.contains("<count>5</count>"));
+        assertEquals(
+                "statistics",
+                document.getDocumentElement().getNodeName()
+        );
 
-        int paintIndex = content.indexOf("<value>paint</value>");
-        int woodIndex = content.indexOf("<value>wood</value>");
+        NodeList items =
+                document.getElementsByTagName("item");
 
-        assertTrue(paintIndex < woodIndex, "Елемент paint має бути в файлі раніше за wood");
+        assertEquals(2, items.getLength());
+
+        NodeList values =
+                document.getElementsByTagName("value");
+
+        NodeList counts =
+                document.getElementsByTagName("count");
+
+        assertEquals(
+                "paint",
+                values.item(0).getTextContent()
+        );
+
+        assertEquals(
+                "15",
+                counts.item(0).getTextContent()
+        );
+
+        assertEquals(
+                "wood",
+                values.item(1).getTextContent()
+        );
+
+        assertEquals(
+                "5",
+                counts.item(1).getTextContent()
+        );
     }
+
     @Test
     @DisplayName("Повинен стабільно сортувати елементи з однаковою кількістю")
     void shouldSortEqualCountsByValue() throws Exception {
@@ -66,20 +98,35 @@ public class XmlReportWriterTest {
 
         writer.generateReport(data, "tags");
 
-        String content =
-                Files.readString(expectedFile.toPath());
+        Document document = parseXml(expectedFile);
 
-        int metalIndex =
-                content.indexOf("<value>metal</value>");
+        NodeList values =
+                document.getElementsByTagName("value");
 
-        int paintIndex =
-                content.indexOf("<value>paint</value>");
+        assertEquals(
+                "metal",
+                values.item(0).getTextContent()
+        );
 
-        int woodIndex =
-                content.indexOf("<value>wood</value>");
+        assertEquals(
+                "paint",
+                values.item(1).getTextContent()
+        );
 
-        assertTrue(metalIndex < paintIndex);
-        assertTrue(paintIndex < woodIndex);
+        assertEquals(
+                "wood",
+                values.item(2).getTextContent()
+        );
     }
 
+    private Document parseXml(File file) throws Exception {
+
+        DocumentBuilderFactory factory =
+                DocumentBuilderFactory.newInstance();
+
+        var builder =
+                factory.newDocumentBuilder();
+
+        return builder.parse(file);
+    }
 }

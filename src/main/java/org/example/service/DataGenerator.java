@@ -20,8 +20,7 @@ public class DataGenerator {
     };
 
     private static final String[] STATUSES = {
-            "DRAFT",
-            "IN_APPROVAL",
+            "PENDING",
             "APPROVED",
             "PURCHASED",
             "CANCELED"

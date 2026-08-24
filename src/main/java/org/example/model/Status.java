@@ -1,8 +1,7 @@
 package org.example.model;
 
 public enum Status {
-    DRAFT,
-    IN_APPROVAL,
+    PENDING,
     APPROVED,
     PURCHASED,
     CANCELED;
