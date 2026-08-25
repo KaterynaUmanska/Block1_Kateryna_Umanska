@@ -168,7 +168,7 @@ status, unit та material, а також обробки null, порожніх 
 
 Результатом роботи програми є файл:
 
-```text
+```
 statistics_by_{attribute}.xml
 ```
 
