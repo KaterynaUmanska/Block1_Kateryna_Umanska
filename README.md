@@ -46,22 +46,22 @@
 Для компіляції проєкту та запуску всіх unit-тестів:
 
 Для Windows:
-```cmd
-mvnw.cmd clean test
+```
+mvnw. clean test
 ```
 Для Linux/macOS:
-```bash
+```
 ./mvnw clean test
 ```
 
 Для створення .jar-файлу:
 
 Для Windows:
-```cmd
-mvnw.cmd clean package
+```
+mvnw. clean package
 ```
 Для Linux/macOS:
-```bash
+```
 ./mvnw clean package
 ```
 
@@ -212,7 +212,7 @@ statistics_by_{attribute}.xml
 
 Для запуску всіх unit-тестів використовується команда:
 
-```bash
+```
 mvn clean test
 ```
 
