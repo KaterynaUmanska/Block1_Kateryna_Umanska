@@ -36,7 +36,7 @@ public class DataGenerator {
         Random random = new Random();
 
         for (int fileNumber = 1; fileNumber <= FILES_COUNT; fileNumber++) {
-            File file = new File(dataDirectory, "data_part_" + fileNumber + ".json");
+            File file = new File(dataDirectory, "data_" + fileNumber + ".json");
 
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
                 writer.write("[\n");
