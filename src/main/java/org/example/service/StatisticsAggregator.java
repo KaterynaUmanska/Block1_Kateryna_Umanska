@@ -79,6 +79,7 @@ public class StatisticsAggregator {
     }
 
     private void addCount(String key) {
+
         statistics.computeIfAbsent(key, ignored -> new LongAdder()).increment();
     }
 
