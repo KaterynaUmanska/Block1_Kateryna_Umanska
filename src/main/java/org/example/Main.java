@@ -13,29 +13,18 @@ public class Main {
             generateDataIfNeeded();
 
             String directoryPath = "data";
-            String attribute;
-            int threadCount;
             int availableCores = Runtime.getRuntime().availableProcessors();
 
-            if (args.length < 2) {
-                Scanner scanner = new Scanner(System.in);
+            Scanner scanner = new Scanner(System.in);
 
-                System.out.println("Консольна програма збору статистики");
-                System.out.print("Введіть назву атрибута для статистики (material, status, tags, unit): ");
-                attribute = scanner.nextLine().trim();
+            System.out.println("Консольна програма збору статистики");
+            System.out.print("Введіть назву атрибута для статистики (material, status, tags, unit): ");
+            String attribute = scanner.nextLine().trim();
 
-                System.out.print("Введіть кількість потоків (Максимальна кількість: " + availableCores + "): ");
-                String threadsInput = scanner.nextLine().trim();
+            System.out.print("Введіть кількість потоків (Максимальна кількість: " + availableCores + "): ");
+            String threadsInput = scanner.nextLine().trim();
 
-                threadCount = parseThreadCount(threadsInput, availableCores);
-            } else {
-                directoryPath = args[0].trim();
-                attribute = args[1].trim();
-
-                threadCount = args.length >= 3
-                        ? parseThreadCount(args[2], availableCores)
-                        : availableCores;
-            }
+            int threadCount = parseThreadCount(threadsInput, availableCores);
 
             System.out.println("\nЗапуск обробки...");
 
