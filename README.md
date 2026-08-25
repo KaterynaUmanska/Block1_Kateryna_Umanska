@@ -18,7 +18,7 @@
 
 - id (long) - ідентифікатор матеріалу;
 - name (String) - назву матеріалу;
-- unit (Unit) - одиницю вимірювання. Можливі значення: KG, LITER, METER, PIECE.
+- unit (Unit) - одиницю вимірювання. Можливі значення: KG, LITERS, METERS, PCS.
 
 Між сутностями існує зв'язок багато-до-одного (Many-to-One):
 кожен запис про закупівлю (PurchaseRecord) пов'язаний з одним матеріалом
@@ -30,7 +30,7 @@
 - tags - багатозначний текстовий атрибут;
 - status - статус запису про закупівлю;
 - unit - одиниця вимірювання пов'язаного матеріалу (material.unit);
-- material - пов'язаний матеріал.
+- material - пов'язаний матеріал (material.name).
 
 Особливістю атрибуту tags є те, що він може містити декілька значень. Наприклад: "metal, heavy".
 
@@ -139,7 +139,7 @@ status, unit та material, а також обробки null, порожніх 
     },
     "quantity": 150.5,
     "status": "APPROVED",
-    "tags": "urgent, metal, production"
+    "tags": "urgent, metal, heavy"
   },
   {
     "id": 2,
@@ -150,7 +150,7 @@ status, unit та material, а також обробки null, порожніх 
     },
     "quantity": 80.0,
     "status": "PENDING",
-    "tags": "metal, production"
+    "tags": "metal, heavy"
   }
 ]
 ```
@@ -181,11 +181,11 @@ statistics_by_{attribute}.xml
 ```xml
 <statistics>
   <item>
-    <value>metal</value>
+    <value>heavy</value>
     <count>2</count>
   </item>
   <item>
-    <value>production</value>
+    <value>metal</value>
     <count>2</count>
   </item>
   <item>
