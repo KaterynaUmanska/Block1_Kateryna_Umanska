@@ -37,20 +37,30 @@
 
 ## Налаштування
 
-Для роботи проєкту необхідно мати встановлену Java 21 та Maven.
+Для роботи проєкту необхідно мати встановлену Java 21.
+
+Проєкт містить Maven Wrapper, тому окремо встановлювати Maven не потрібно.
 
 ### Збірка та тестування
 
 Для компіляції проєкту та запуску всіх unit-тестів:
-
+Для Windows:
+```cmd
+mvnw.cmd clean test
+```
+Для Linux/macOS:
 ```bash
-mvn clean test
+./mvnw clean test
 ```
 
 Для створення .jar-файлу:
-
+Для Windows:
+```cmd
+mvnw.cmd clean package
+```
+Для Linux/macOS:
 ```bash
-mvn clean package
+./mvnw clean package
 ```
 
 ## Запуск програми
