@@ -44,6 +44,7 @@
 ### Збірка та тестування
 
 Для компіляції проєкту та запуску всіх unit-тестів:
+
 Для Windows:
 ```cmd
 mvnw.cmd clean test
@@ -54,6 +55,7 @@ mvnw.cmd clean test
 ```
 
 Для створення .jar-файлу:
+
 Для Windows:
 ```cmd
 mvnw.cmd clean package
