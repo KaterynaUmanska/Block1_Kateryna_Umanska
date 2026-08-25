@@ -47,7 +47,7 @@
 
 Для Windows:
 ```
-mvnw. clean test
+mvnw.cmd clean test
 ```
 Для Linux/macOS:
 ```
@@ -58,7 +58,7 @@ mvnw. clean test
 
 Для Windows:
 ```
-mvnw. clean package
+mvnw.cmd clean package
 ```
 Для Linux/macOS:
 ```
@@ -209,12 +209,6 @@ statistics_by_{attribute}.xml
 * сортування результатів;
 * роботу з директоріями;
 * обробку помилкових ситуацій.
-
-Для запуску всіх unit-тестів використовується команда:
-
-```
-mvn clean test
-```
 
 Усі unit-тести успішно проходять.
 
