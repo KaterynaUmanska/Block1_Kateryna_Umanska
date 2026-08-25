@@ -9,15 +9,15 @@ import java.util.Random;
 
 public class DataGenerator {
 
-    private static final String[] TAGS = {
+    private static final String[] TAG = {
             "metal", "heavy", "paint", "urgent", "wood", "fragile", "chem"
     };
 
-    private static final String[] STATUSES = {
+    private static final String[] STATUS = {
             "PENDING", "APPROVED", "PURCHASED", "CANCELED"
     };
 
-    private static final String[] UNITS = {
+    private static final String[] UNIT = {
             "KG", "METERS", "PCS", "LITERS"
     };
 
@@ -43,8 +43,8 @@ public class DataGenerator {
 
                 for (int recordNumber = 1; recordNumber <= RECORDS_PER_FILE; recordNumber++) {
                     int materialId = random.nextInt(MATERIALS_COUNT) + 1;
-                    String status = STATUSES[random.nextInt(STATUSES.length)];
-                    String unit = UNITS[random.nextInt(UNITS.length)];
+                    String status = STATUS[random.nextInt(STATUS.length)];
+                    String unit = UNIT[random.nextInt(UNIT.length)];
                     String tags = generateTags(random);
 
                     long transactionId = (long) (fileNumber - 1) * RECORDS_PER_FILE + recordNumber;
@@ -92,7 +92,7 @@ public class DataGenerator {
 
     private static String generateTags(Random random) {
         int tagCount = random.nextInt(2) + 1;
-        String firstTag = TAGS[random.nextInt(TAGS.length)];
+        String firstTag = TAG[random.nextInt(TAG.length)];
 
         if (tagCount == 1) {
             return firstTag;
@@ -100,7 +100,7 @@ public class DataGenerator {
 
         String secondTag;
         do {
-            secondTag = TAGS[random.nextInt(TAGS.length)];
+            secondTag = TAG[random.nextInt(TAG.length)];
         } while (firstTag.equals(secondTag));
 
         return firstTag + ", " + secondTag;
