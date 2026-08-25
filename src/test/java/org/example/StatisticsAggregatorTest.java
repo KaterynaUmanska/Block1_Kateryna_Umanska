@@ -36,7 +36,7 @@ public class StatisticsAggregatorTest {
     }
 
     @Test
-    @DisplayName("Повинен правильно підраховувати статистику за enum-статусом")
+    @DisplayName("Повинен правильно підраховувати статистику за статусом")
     void shouldCorrectlyAggregateStatus() {
         StatisticsAggregator aggregator = new StatisticsAggregator("status");
 
