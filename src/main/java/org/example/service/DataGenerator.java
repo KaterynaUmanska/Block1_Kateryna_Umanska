@@ -25,10 +25,6 @@ public class DataGenerator {
     private static final int RECORDS_PER_FILE = 10_000;
     private static final int MATERIALS_COUNT = 500;
 
-    public static void main(String[] args) {
-        generateData();
-    }
-
     public static void generateData() {
         File dataDirectory = new File("data");
 
