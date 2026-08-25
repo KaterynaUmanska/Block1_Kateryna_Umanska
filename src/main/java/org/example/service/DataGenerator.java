@@ -47,7 +47,7 @@ public class DataGenerator {
                     String unit = UNIT[random.nextInt(UNIT.length)];
                     String tags = generateTags(random);
 
-                    long transactionId = (long) (fileNumber - 1) * RECORDS_PER_FILE + recordNumber;
+                    long recordId = (long) (fileNumber - 1) * RECORDS_PER_FILE + recordNumber;
                     double quantity = 1.0 + random.nextDouble() * 100;
                     String comma = (recordNumber == RECORDS_PER_FILE) ? "" : ",";
 
@@ -66,7 +66,7 @@ public class DataGenerator {
                               "tags": "%s"
                             }%s
                             """,
-                            transactionId,
+                            recordId,
                             materialId,
                             materialId,
                             unit,

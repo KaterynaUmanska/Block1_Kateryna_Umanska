@@ -32,29 +32,29 @@ public class StatisticsAggregator {
         }
     }
 
-    public void process(PurchaseRecord transaction) {
-        if (transaction == null) {
+    public void process(PurchaseRecord record) {
+        if (record == null) {
             return;
         }
 
         switch (targetAttribute) {
-            case "tags" -> processMultiValueAttribute(transaction.getTags());
+            case "tags" -> processMultiValueAttribute(record.getTags());
 
             case "status" -> {
-                if (transaction.getStatus() != null) {
-                    addCount(transaction.getStatus().name());
+                if (record.getStatus() != null) {
+                    addCount(record.getStatus().name());
                 }
             }
 
             case "unit" -> {
-                if (transaction.getMaterial() != null && transaction.getMaterial().getUnit() != null) {
-                    addCount(transaction.getMaterial().getUnit().name());
+                if (record.getMaterial() != null && record.getMaterial().getUnit() != null) {
+                    addCount(record.getMaterial().getUnit().name());
                 }
             }
 
             case "material" -> {
-                if (transaction.getMaterial() != null && transaction.getMaterial().getName() != null) {
-                    addCount(transaction.getMaterial().getName());
+                if (record.getMaterial() != null && record.getMaterial().getName() != null) {
+                    addCount(record.getMaterial().getName());
                 }
             }
 

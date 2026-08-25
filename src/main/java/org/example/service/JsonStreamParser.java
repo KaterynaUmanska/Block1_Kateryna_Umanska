@@ -39,8 +39,8 @@ public class JsonStreamParser {
                     throw new IllegalStateException("Очікувався JSON-об'єкт у масиві файлу: " + file.getName());
                 }
 
-                PurchaseRecord transaction = objectMapper.readValue(parser, PurchaseRecord.class);
-                consumer.accept(transaction);
+                PurchaseRecord record = objectMapper.readValue(parser, PurchaseRecord.class);
+                consumer.accept(record);
             }
 
             if (parser.nextToken() != null) {
