@@ -24,7 +24,7 @@ public class Main {
                 System.out.print("Введіть назву атрибута для статистики (material, status, tags, unit): ");
                 attribute = scanner.nextLine().trim();
 
-                System.out.print("Введіть кількість потоків (натисніть Enter для значення за замовчуванням: " + availableCores + "): ");
+                System.out.print("Введіть кількість потоків (Максимальна кількість: " + availableCores + "): ");
                 String threadsInput = scanner.nextLine().trim();
 
                 threadCount = parseThreadCount(threadsInput, availableCores);
@@ -81,8 +81,8 @@ public class Main {
         try {
             int threadCount = Integer.parseInt(input);
 
-            if (threadCount <= 0) {
-                System.out.println("Кількість потоків повинна бути більшою за 0. Використовуємо значення за замовчуванням: " + defaultValue);
+            if (threadCount <= 0 || threadCount > defaultValue) {
+                System.out.println("Некоректна кількість потоків (повинна бути від 1 до " + defaultValue + "). Використовуємо значення за замовчуванням: " + defaultValue);
                 return defaultValue;
             }
 
