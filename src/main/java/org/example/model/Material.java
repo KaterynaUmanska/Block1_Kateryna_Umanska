@@ -4,17 +4,15 @@ public class Material {
     private Long id;
     private String name;
     private Unit unit;
-    private String description;
 
     public Material(){
 
     }
 
-    public Material(Long id, String name, Unit unit, String description) {
+    public Material(Long id, String name, Unit unit) {
         this.id = id;
         this.name = name;
         this.unit = unit;
-        this.description = description;
     }
 
     public Long getId() {
@@ -41,11 +39,4 @@ public class Material {
         this.unit = unit;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }
