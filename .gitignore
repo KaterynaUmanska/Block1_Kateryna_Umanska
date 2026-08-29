@@ -4,7 +4,6 @@ target/
 # IntelliJ IDEA
 .idea/
 *.iml
-*.mvnw
 
 # Generated test data
 /data/
