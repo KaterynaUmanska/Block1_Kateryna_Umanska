@@ -21,9 +21,9 @@ public class DataGenerator {
             "KG", "METERS", "PCS", "LITERS"
     };
 
-    private static final int FILES_COUNT = 10;
-    private static final int RECORDS_PER_FILE = 10_000;
-    private static final int MATERIALS_COUNT = 500;
+    private static final int FILES_COUNT = 20;
+    private static final int RECORDS_PER_FILE = 50_000;
+    private static final int MATERIALS_COUNT = 1_000;
 
     public static void generateData() {
         File dataDirectory = new File("data");
