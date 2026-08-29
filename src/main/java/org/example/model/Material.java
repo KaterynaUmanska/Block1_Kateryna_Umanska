@@ -38,5 +38,4 @@ public class Material {
     public void setUnit(Unit unit) {
         this.unit = unit;
     }
-
 }
