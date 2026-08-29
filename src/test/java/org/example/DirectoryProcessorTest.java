@@ -134,7 +134,6 @@ class DirectoryProcessorTest {
                 }
             }
         }
-
         //expectedStatistics.put("paint", 999999);
 
         File resultFile = new File("statistics_by_tags.xml");
