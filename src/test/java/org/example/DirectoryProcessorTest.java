@@ -112,7 +112,9 @@ class DirectoryProcessorTest {
 
         List<Path> jsonFiles;
         try (Stream<Path> files = Files.list(dataDirectory)) {
-            jsonFiles = files.filter(path -> path.toString().endsWith(".json")).sorted().toList();
+            jsonFiles = files
+                    .filter(path -> path.toString().endsWith(".json"))
+                    .toList();
         }
 
         Map<String, Integer> expectedStatistics = new HashMap<>();
@@ -120,9 +122,12 @@ class DirectoryProcessorTest {
 
         for (Path jsonFile : jsonFiles) {
             JsonNode root = objectMapper.readTree(jsonFile.toFile());
+
             for (JsonNode record : root) {
                 JsonNode tagsNode = record.get("tags");
-                if (tagsNode == null || tagsNode.isNull()) continue;
+                if (tagsNode == null || tagsNode.isNull()) {
+                    continue;
+                }
 
                 for (String tag : tagsNode.asText().split(",")) {
                     String normalizedTag = tag.trim();
@@ -132,14 +137,18 @@ class DirectoryProcessorTest {
                 }
             }
         }
+
         //expectedStatistics.put("paint", 999999);
 
         File resultFile = new File("statistics_by_tags.xml");
+
         try {
             DirectoryProcessor processor = new DirectoryProcessor();
             processor.processDirectory(dataDirectory.toString(), "tags", 4);
 
-            assertTrue(resultFile.exists(), "XML-файл зі статистикою повинен бути створений");
+            assertTrue(resultFile.exists(),
+                    "XML-файл зі статистикою повинен бути створений");
+
             String content = Files.readString(resultFile.toPath());
 
             Pattern pattern = Pattern.compile(
@@ -147,7 +156,6 @@ class DirectoryProcessorTest {
             );
 
             Matcher matcher = pattern.matcher(content);
-
             Map<String, Integer> actualStatistics = new HashMap<>();
 
             while (matcher.find()) {
