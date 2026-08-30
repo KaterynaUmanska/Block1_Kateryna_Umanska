@@ -104,6 +104,7 @@ class DirectoryProcessorTest {
         verify(parser, times(3)).parseFile(any(File.class), any());
         verify(xmlWriter).generateReport(eq(Map.of("metal", 3L)), eq("tags"));
     }
+
     @Test
     @DisplayName("Повинен коректно агрегувати дані з кількох JSON-файлів при паралельній обробці")
     void shouldCorrectlyProcessMultipleFilesConcurrently() throws Exception {
