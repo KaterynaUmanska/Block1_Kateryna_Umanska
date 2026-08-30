@@ -141,16 +141,18 @@ class DirectoryProcessorTest {
 
         //expectedStatistics.put("paint", 999999);
 
-        File resultFile = new File("statistics_by_tags.xml");
+        Path resultFile = Path.of("statistics_by_tags.xml");
 
         try {
             DirectoryProcessor processor = new DirectoryProcessor();
             processor.processDirectory(dataDirectory.toString(), "tags", 4);
 
-            assertTrue(resultFile.exists(),
-                    "XML-файл зі статистикою повинен бути створений");
+            assertTrue(
+                    Files.exists(resultFile),
+                    "XML-файл зі статистикою повинен бути створений"
+            );
 
-            String content = Files.readString(resultFile.toPath());
+            String content = Files.readString(resultFile);
 
             Pattern pattern = Pattern.compile(
                     "<value>(.*?)</value>\\s*<count>(\\d+)</count>"
@@ -171,7 +173,7 @@ class DirectoryProcessorTest {
                     "Результат паралельної обробки не відповідає очікуваній статистиці"
             );
         } finally {
-            Files.deleteIfExists(resultFile.toPath());
+            Files.deleteIfExists(resultFile);
         }
     }
 }
