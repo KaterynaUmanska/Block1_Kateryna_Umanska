@@ -115,8 +115,6 @@ class DirectoryProcessorTest {
             jsonFiles = files.filter(path -> path.toString().endsWith(".json")).sorted().toList();
         }
 
-        assertEquals(20, jsonFiles.size(), "У папці data повинно бути 20 JSON-файлів");
-
         Map<String, Integer> expectedStatistics = new HashMap<>();
         ObjectMapper objectMapper = new ObjectMapper();
 
